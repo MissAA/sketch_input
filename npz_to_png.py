@@ -18,18 +18,9 @@ def resize(data):
     :param data: the array indicating the sketch, consists of x-y coordinates as tuples
     :return new_data: the array with x-y tuples where all values are greater than 0
     """
-    min_x = 0
-    min_y = 0
-    offset = 5
-    for point in data:
-        if point[0] < min_x:
-            min_x = point[0]
-        if point[1] < min_y:
-            min_y = point[1]
-        else:
-            continue
-    min_x = offset + min_x * -1
-    min_y = offset + min_y * -1
+
+    min_x = 400
+    min_y = 400
     new_data = []
     for point in data:
         new_x = point[0] + min_x
@@ -64,7 +55,7 @@ def draw_sketch(data):
     :param data: numpy object with 'drawing' key as the sketch array, 'key_id' as the id of the represented sketch and 'class' as
     the category the sketch belongs to
     """
-    DEFAULT_SIZE_WHITE_CHANNEL = (256, 256, 1)
+    DEFAULT_SIZE_WHITE_CHANNEL = (800, 800, 1)
     canvas = np.ones(DEFAULT_SIZE_WHITE_CHANNEL, dtype="uint8") * 255
 
     sketch = convert_points(data["drawing"])
