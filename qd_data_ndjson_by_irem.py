@@ -26,23 +26,28 @@ def open_and_read(file_path):
 
 
 qd_categories = open_and_read(file_path)
-number_of_categories_to_subsample = 60
+number_of_categories_to_subsample = 10
 
-qd_categories_subsample = random.sample(qd_categories, number_of_categories_to_subsample)
-print("The selected categories are:")
+#qd_categories_subsample = random.sample(qd_categories, number_of_categories_to_subsample)
+qd_categories_subsample =  random.sample(qd_categories, number_of_categories_to_subsample)
 print(qd_categories_subsample)
 
 for category in qd_categories_subsample:
     sketch_name = category
-    number_of_drawings = 20
+    number_of_drawings = 1
     qd = QuickDrawData()
     doodle = qd.get_drawing(sketch_name)
     drawing_list = []
-    with open("./ndjson_files/" + sketch_name + "_simplified_qd.ndjson", 'w') as f:
+    all_keys = []
+    with open("./ndjson_files/10_test/" + sketch_name + "_simplified_qd.ndjson", 'w') as f:
         writer = ndjson.writer(f, ensure_ascii=False)
         for i in range(number_of_drawings):
-            while doodle.recognized is False or doodle in drawing_list:
+            while doodle.recognized is False or doodle.key_id in all_keys:
                 doodle = qd.get_drawing(sketch_name)
             drawing_list.append(doodle)
             drawing_map = {"word": sketch_name, "key_id": doodle.key_id, "drawing": doodle.image_data}
+            if len(all_keys) > 0:
+                all_keys.append(doodle.key_id)
+            else:
+                all_keys = [doodle.key_id]
             writer.writerow(drawing_map)
